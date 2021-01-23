@@ -13,7 +13,7 @@ pip install -r requirements.txt
 ## Example Usage
 
 ```
-python3 raspberry_cli.py all-off
+python3 http_cli.py all-off
 
 ```
 

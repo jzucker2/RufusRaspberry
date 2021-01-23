@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import logging
 from src import arg_parser
 from src.rufus_client import RufusClient

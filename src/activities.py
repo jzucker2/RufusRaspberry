@@ -34,12 +34,12 @@ class Activities(object):
         return cls.get_activity(activity).url
 
     @classmethod
-    def get_activity_pin(cls, activity):
-        return cls.get_activity(activity).pin
+    def get_activity_pin(cls, activity_name):
+        return cls.get_activity(activity_name.value).pin
 
     @classmethod
     def get_activity(cls, activity):
-        return cls.ACTIVITIES[activity.value]
+        return cls.ACTIVITIES[activity]
 
     ACTIVITIES = {
         ActivityName.ALL_OFF.value: Activity(name=ActivityName.ALL_OFF.value, url='api/v1/activities/all-off?kitchen=0&dining_room=0', pin=1),

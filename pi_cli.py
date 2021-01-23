@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import logging
 from src.rufus_client import RufusClient
 from src.pi_client import PiClient

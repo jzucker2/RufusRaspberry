@@ -17,6 +17,9 @@ class PiClient(object):
 
     def __init__(self, rufus_client):
         self.rufus_client = rufus_client
+        self._set_up_buttons()
+
+    def _set_up_buttons(self):
         for activity_name, button in self.BUTTONS.items():
             def shim_func():
                 self.rufus_client.request_activity(activity_name)
@@ -28,4 +31,12 @@ class PiClient(object):
 
     def run(self):
         pause()
+
+
+# Do I really even need this?
+if __name__ == '__main__':
+    from .rufus_client import RufusClient
+    rufus = RufusClient()
+    client = PiClient(rufus)
+    client.run()
 

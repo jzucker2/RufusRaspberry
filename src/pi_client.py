@@ -14,6 +14,8 @@ class PiClient(object):
         ActivityName.APPLE_TV: Button(Activities.get_activity_pin(ActivityName.APPLE_TV), bounce_time=Constants.DEFAULT_BOUNCE_TIME),
         ActivityName.VINYL: Button(Activities.get_activity_pin(ActivityName.VINYL), bounce_time=Constants.DEFAULT_BOUNCE_TIME),
         ActivityName.BEDTIME: Button(Activities.get_activity_pin(ActivityName.BEDTIME), bounce_time=Constants.DEFAULT_BOUNCE_TIME),
+        ActivityName.NIGHTLY_MOVIE: Button(Activities.get_activity_pin(ActivityName.NIGHTLY_MOVIE),
+                                     bounce_time=Constants.DEFAULT_BOUNCE_TIME),
     }
 
     def __init__(self, rufus_client, debug=False):

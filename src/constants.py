@@ -11,6 +11,7 @@ class Constants(object):
     GREEN_WIRE_PIN = 4
     RED_WIRE_PIN = 17
     YELLOW_WIRE_PIN = 22
+    ORANGE_WIRE_PIN = 10
 
     DEFAULT_LOG_LEVEL = logging.INFO
 

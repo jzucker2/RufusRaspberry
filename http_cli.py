@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 
 def main():
-	parser = arg_parser.create_argparser()
+	parser = arg_parser.create_argparser(include_activity_choices=True)
 	args = parser.parse_args()
 	log.debug(f'Args: {args}')
 	client = RufusClient(args.ip)

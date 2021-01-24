@@ -36,3 +36,12 @@ class RufusClient(object):
             'content-type': 'application/json',
         }
         return requests.get(url, headers=headers)
+
+    def get_request_activity_method(self, activity_name, debug=False):
+        def dynamic_func():
+            log.info(f'Intending to perform activity: {activity_name.value}')
+            if debug:
+                log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
+                return
+            self.request_activity(activity_name.value)
+        return dynamic_func

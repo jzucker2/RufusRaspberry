@@ -1,5 +1,5 @@
 import logging
-from gpiozero import Button
+from gpiozero import Button, TrafficLights
 from signal import pause
 from .activities import Activities, ActivityName
 from .constants import Constants
@@ -22,10 +22,11 @@ class PiClient(object):
         self.debug = debug
         self.rufus_client = rufus_client
         self._set_up_buttons()
+        self.traffic_lights = TrafficLights(Constants.RED_LED_PIN, Constants.AMBER_LED_PIN, Constants.GREEN_LED_PIN)
 
     def _set_up_buttons(self):
         for activity_name, button in self.BUTTONS.items():
-            button.when_pressed = self.rufus_client.get_request_activity_method(activity_name, debug=self.debug)
+            button.when_pressed = self.rufus_client.get_request_activity_method(activity_name, debug=self.debug, traffic_lights=self.traffic_lights)
 
     @classmethod
     def get_button(cls, activity_name):

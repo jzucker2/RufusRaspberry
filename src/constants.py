@@ -13,6 +13,11 @@ class Constants(object):
     YELLOW_WIRE_PIN = 22
     ORANGE_WIRE_PIN = 10
 
+    # LEDs
+    RED_LED_PIN = 1
+    AMBER_LED_PIN = 2
+    GREEN_LED_PIN = 3
+
     DEFAULT_LOG_LEVEL = logging.INFO
 
     # turns out this needs to be `None`?

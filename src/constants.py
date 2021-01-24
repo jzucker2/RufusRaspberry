@@ -13,3 +13,7 @@ class Constants(object):
     YELLOW_WIRE_PIN = 22
 
     DEFAULT_LOG_LEVEL = logging.INFO
+
+    # turns out this needs to be 0?
+    # https://github.com/gpiozero/gpiozero/issues/550
+    DEFAULT_BOUNCE_TIME = 0

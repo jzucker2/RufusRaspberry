@@ -2,6 +2,7 @@ import logging
 from gpiozero import Button
 from signal import pause
 from .activities import Activities, ActivityName
+from .constants import Constants
 
 
 log = logging.getLogger(__name__)
@@ -9,10 +10,10 @@ log = logging.getLogger(__name__)
 
 class PiClient(object):
     BUTTONS = {
-        ActivityName.ALL_OFF: Button(Activities.get_activity_pin(ActivityName.ALL_OFF), bounce_time=0.5),
-        ActivityName.APPLE_TV: Button(Activities.get_activity_pin(ActivityName.APPLE_TV), bounce_time=0.5),
-        ActivityName.VINYL: Button(Activities.get_activity_pin(ActivityName.VINYL), bounce_time=0.5),
-        ActivityName.BEDTIME: Button(Activities.get_activity_pin(ActivityName.BEDTIME), bounce_time=0.5),
+        ActivityName.ALL_OFF: Button(Activities.get_activity_pin(ActivityName.ALL_OFF), bounce_time=Constants.DEFAULT_BOUNCE_TIME),
+        ActivityName.APPLE_TV: Button(Activities.get_activity_pin(ActivityName.APPLE_TV), bounce_time=Constants.DEFAULT_BOUNCE_TIME),
+        ActivityName.VINYL: Button(Activities.get_activity_pin(ActivityName.VINYL), bounce_time=Constants.DEFAULT_BOUNCE_TIME),
+        ActivityName.BEDTIME: Button(Activities.get_activity_pin(ActivityName.BEDTIME), bounce_time=Constants.DEFAULT_BOUNCE_TIME),
     }
 
     def __init__(self, rufus_client, debug=False):

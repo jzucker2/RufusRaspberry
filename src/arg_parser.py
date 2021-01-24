@@ -9,6 +9,7 @@ def create_argparser():
                         help='IP of Rufus server')
     parser.add_argument('activity', choices=Activities.all_activity_names(),
                         help='Activity for Rufus to execute')
+    parser.add_argument('--debug', '-d', action='store_true', help='Turn on the debug flag (will ensure Raspberry Pi only logs')
     parser.add_argument('--version', action='version', version=version)
     return parser
 

@@ -15,15 +15,20 @@ class PiClient(object):
         ActivityName.BEDTIME: Button(Activities.get_activity_pin(ActivityName.BEDTIME), bounce_time=0.5),
     }
 
-    def __init__(self, rufus_client):
+    def __init__(self, rufus_client, debug=False):
+        self.debug = debug
         self.rufus_client = rufus_client
         self._set_up_buttons()
 
     def _set_up_buttons(self):
         for activity_name, button in self.BUTTONS.items():
             def shim_func():
+                log.info(f'Pressed button {button} to perform activity: {activity_name.value}')
+                if self.debug:
+                    log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
+                    return
                 self.rufus_client.request_activity(activity_name.value)
-            button.when_pressed = shim_func()
+            button.when_pressed = shim_func
 
     @classmethod
     def get_button(cls, activity_name):

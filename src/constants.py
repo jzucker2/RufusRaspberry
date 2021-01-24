@@ -1,3 +1,9 @@
+import logging
+
+
+log = logging.getLogger(__name__)
+
+
 class Constants(object):
     DEFAULT_IP = 'http://10.0.1.104:5000'
 
@@ -6,3 +12,4 @@ class Constants(object):
     RED_WIRE_PIN = 17
     YELLOW_WIRE_PIN = 22
 
+    DEFAULT_LOG_LEVEL = logging.INFO

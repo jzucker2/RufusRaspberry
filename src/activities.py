@@ -31,16 +31,16 @@ class Activities(object):
         return cls.ACTIVITIES.values()
 
     @classmethod
-    def get_activity_url_suffix(cls, activity):
-        return cls.get_activity(activity).url
+    def get_activity_url_suffix(cls, activity_name):
+        return cls.get_activity(activity_name).url
 
     @classmethod
     def get_activity_pin(cls, activity_name):
         return cls.get_activity(activity_name.value).pin
 
     @classmethod
-    def get_activity(cls, activity):
-        return cls.ACTIVITIES[activity]
+    def get_activity(cls, activity_name):
+        return cls.ACTIVITIES[activity_name]
 
     ACTIVITIES = {
         ActivityName.ALL_OFF.value: Activity(name=ActivityName.ALL_OFF.value, url='api/v1/activities/all-off?kitchen=0&dining_room=0', pin=Constants.BLUE_WIRE_PIN),

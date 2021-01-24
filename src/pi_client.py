@@ -22,12 +22,12 @@ class PiClient(object):
     def _set_up_buttons(self):
         for activity_name, button in self.BUTTONS.items():
             def shim_func():
-                self.rufus_client.request_activity(activity_name)
+                self.rufus_client.request_activity(activity_name.value)
             button.when_pressed = shim_func()
 
     @classmethod
-    def get_button(cls, activity):
-        return cls.BUTTONS[activity]
+    def get_button(cls, activity_name):
+        return cls.BUTTONS[activity_name]
 
     def run(self):
         pause()

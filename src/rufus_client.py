@@ -18,19 +18,19 @@ class RufusClient(object):
     def base_url(self):
         return self.ip
 
-    def get_url(self, activity):
+    def get_url(self, activity_name):
         base_url = self.base_url
         print(f'base_url: {base_url}')
-        activity_url = Activities.get_activity_url_suffix(activity)
+        activity_url = Activities.get_activity_url_suffix(activity_name)
         print(f'activity_url: {activity_url}')
         final = parse.urljoin(base_url, activity_url)
         print(f'final: {final}')
         return final
 
-    def request_activity(self, activity):
-        url = self.get_url(activity)
+    def request_activity(self, activity_name):
+        url = self.get_url(activity_name)
         print(url)
-        log.info(f'Perform activity: {activity} with url => {url}')
+        log.info(f'Perform activity: {activity_name} with url => {url}')
         headers = {
             'user-agent': f'rufus-raspberry/{version}',
             'content-type': 'application/json',

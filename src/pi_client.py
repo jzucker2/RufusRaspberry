@@ -22,13 +22,6 @@ class PiClient(object):
 
     def _set_up_buttons(self):
         for activity_name, button in self.BUTTONS.items():
-            # def shim_func():
-            #     log.info(f'Pressed button {button} to perform activity: {activity_name.value}')
-            #     if self.debug:
-            #         log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
-            #         return
-            #     self.rufus_client.request_activity(activity_name.value)
-            # button.when_pressed = shim_func
             button.when_pressed = self.rufus_client.get_request_activity_method(activity_name, debug=self.debug)
 
     @classmethod
@@ -36,6 +29,7 @@ class PiClient(object):
         return cls.BUTTONS[activity_name]
 
     def run(self):
+        log.info('Start running ...')
         pause()
 
 

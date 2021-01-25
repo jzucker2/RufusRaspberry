@@ -14,9 +14,9 @@ class Constants(object):
     ORANGE_WIRE_PIN = 10
 
     # LEDs
-    RED_LED_PIN = 1
-    AMBER_LED_PIN = 2
-    GREEN_LED_PIN = 3
+    RED_LED_PIN = 14
+    AMBER_LED_PIN = 15
+    GREEN_LED_PIN = 18
 
     DEFAULT_LOG_LEVEL = logging.INFO
 

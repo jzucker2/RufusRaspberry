@@ -49,6 +49,9 @@ class RufusClient(object):
                 log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
                 return
             response = self.request_activity(activity_name.value)
+            if not traffic_lights:
+                return response
+            log.debug(f'Activating traffic lights')
             if response.status_code == 200:
                 traffic_lights.amber.off()
                 traffic_lights.green.on()
@@ -58,4 +61,5 @@ class RufusClient(object):
                 traffic_lights.green.off()
                 traffic_lights.red.on()
             sleep(1)
+            return response
         return dynamic_func

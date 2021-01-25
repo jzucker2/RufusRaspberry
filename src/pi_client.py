@@ -27,6 +27,11 @@ class PiClient(object):
                                                                                 traffic_lights=self.traffic_lights)
             self.buttons[activity_name] = button
 
+    def turn_off_traffic_lights(self):
+        self.traffic_lights.amber.off()
+        self.traffic_lights.green.off()
+        self.traffic_lights.red.off()
+
     def run(self):
         log.info('Start running ...')
         pause()

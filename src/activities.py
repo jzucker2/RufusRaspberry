@@ -20,6 +20,7 @@ class ActivityName(Enum):
     VINYL = 'vinyl'
     BEDTIME = 'bedtime'
     NIGHTLY_MOVIE = 'nightly-movie'
+    WORK_FROM_HOME = 'work-from-home'
 
 
 class Activities(object):
@@ -51,4 +52,7 @@ class Activities(object):
         ActivityName.NIGHTLY_MOVIE.value: Activity(name=ActivityName.NIGHTLY_MOVIE.value,
                                              url='api/v1/activities/nightly-movie',
                                              pin=Constants.ORANGE_WIRE_PIN),
+        ActivityName.WORK_FROM_HOME.value: Activity(name=ActivityName.WORK_FROM_HOME.value,
+                                                   url='api/v1/activities/wfh?kitchen=1&dining_room=1',
+                                                   pin=Constants.BROWN_WIRE_PIN),
     }

@@ -1,6 +1,7 @@
 from urllib import parse
 import requests
 import logging
+from time import sleep
 from .version import version
 from .constants import Constants
 from .activities import Activities
@@ -37,11 +38,31 @@ class RufusClient(object):
         }
         return requests.get(url, headers=headers)
 
-    def get_request_activity_method(self, activity_name, debug=False):
+    def get_request_activity_method(self, activity_name, debug=False, traffic_lights=None):
         def dynamic_func():
+            if traffic_lights:
+                traffic_lights.amber.on()
+                traffic_lights.green.off()
+                traffic_lights.red.off()
             log.info(f'Intending to perform activity: {activity_name.value}')
             if debug:
                 log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
                 return
-            self.request_activity(activity_name.value)
+            response = self.request_activity(activity_name.value)
+            if not traffic_lights:
+                return response
+            log.debug(f'Activating traffic lights')
+            if response.status_code == 200:
+                traffic_lights.amber.off()
+                traffic_lights.green.on()
+                traffic_lights.red.off()
+            else:
+                traffic_lights.amber.off()
+                traffic_lights.green.off()
+                traffic_lights.red.on()
+            sleep(1)
+            traffic_lights.amber.off()
+            traffic_lights.green.off()
+            traffic_lights.red.off()
+            return response
         return dynamic_func

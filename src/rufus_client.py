@@ -61,5 +61,8 @@ class RufusClient(object):
                 traffic_lights.green.off()
                 traffic_lights.red.on()
             sleep(1)
+            traffic_lights.amber.off()
+            traffic_lights.green.off()
+            traffic_lights.red.off()
             return response
         return dynamic_func

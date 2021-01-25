@@ -12,9 +12,13 @@ class PiClient(object):
     def __init__(self, rufus_client, debug=False):
         self.debug = debug
         self.rufus_client = rufus_client
-        self._set_up_buttons()
-        self.traffic_lights = TrafficLights(Constants.RED_LED_PIN, Constants.AMBER_LED_PIN, Constants.GREEN_LED_PIN)
+        # set up leds first because we pass them to buttons
+        self._set_up_traffic_lights()
         self.buttons = {}
+        self._set_up_buttons()
+
+    def _set_up_traffic_lights(self):
+        self.traffic_lights = TrafficLights(Constants.RED_LED_PIN, Constants.AMBER_LED_PIN, Constants.GREEN_LED_PIN)
 
     def _set_up_buttons(self):
         for activity_name in list(ActivityName):

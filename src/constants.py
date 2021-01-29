@@ -13,6 +13,7 @@ class Constants(object):
     YELLOW_WIRE_PIN = 22
     ORANGE_WIRE_PIN = 10
     BROWN_WIRE_PIN = 11
+    WHITE_WIRE_PIN = 20
 
     # LEDs
     RED_LED_PIN = 14

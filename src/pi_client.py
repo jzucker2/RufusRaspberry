@@ -25,7 +25,7 @@ class PiClient(object):
 
     def _set_up_buttons(self):
         # for activity_name in list(ActivityName):
-        for activity_name, pin in self.config.activities:
+        for activity_name, pin in self.config.activities.items():
             button = Button(pin, bounce_time=Constants.DEFAULT_BOUNCE_TIME)
             button.when_pressed = self.rufus_client.get_request_activity_method(activity_name, debug=self.debug,
                                                                                 traffic_lights=self.traffic_lights)

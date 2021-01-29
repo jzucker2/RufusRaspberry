@@ -34,5 +34,12 @@ For [headless pi setup, I'm using the rc.local method here](https://www.dexterin
 Make sure to add to `/etc/rc.local` the following:
 
 ```
-sudo python3 /home/pi/Documents/RufusRaspberry/pi_cli.py &
+# living room
+sudo python3 /home/pi/Documents/RufusRaspberry/living_room_cli.py &
+
+# dining room
+sudo python3 /home/pi/Documents/RufusRaspberry/dining_room_cli.py &
+
+# kitchen
+sudo python3 /home/pi/Documents/RufusRaspberry/kitchen_cli.py &
 ```

@@ -5,7 +5,7 @@ from src.rufus_client import RufusClient
 from src.pi_client import PiClient
 from src.arg_parser import create_argparser
 from src.utils import get_log_level
-from src.configs.living_room import LivingRoomConfig
+from src.configs.dining_room import DiningRoomConfig
 
 
 log = logging.getLogger(__name__)
@@ -18,8 +18,8 @@ def main():
     logging.basicConfig(level=log_level)
     log.info(f'Set log_level to {log_level}')
     rufus_client = RufusClient(ip=args.ip)
-    living_room_config = LivingRoomConfig()
-    pi_client = PiClient(rufus_client, living_room_config, debug=args.debug)
+    dining_room_config = DiningRoomConfig()
+    pi_client = PiClient(rufus_client, dining_room_config, debug=args.debug)
     pi_client.run()
 
 if __name__ == '__main__':

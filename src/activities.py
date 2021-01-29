@@ -21,6 +21,7 @@ class ActivityName(Enum):
     BEDTIME = 'bedtime'
     NIGHTLY_MOVIE = 'nightly-movie'
     WORK_FROM_HOME = 'work-from-home'
+    YOGA = 'yoga'
 
 
 class Activities(object):
@@ -55,4 +56,7 @@ class Activities(object):
         ActivityName.WORK_FROM_HOME.value: Activity(name=ActivityName.WORK_FROM_HOME.value,
                                                    url='api/v1/activities/wfh?kitchen=1&dining_room=1',
                                                    pin=Constants.BROWN_WIRE_PIN),
+        ActivityName.YOGA.value: Activity(name=ActivityName.YOGA.value,
+                                                    url='api/v1/activities/yoga?kitchen=0&dining_room=0',
+                                                    pin=Constants.WHITE_WIRE_PIN),
     }

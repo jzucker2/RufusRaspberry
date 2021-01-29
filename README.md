@@ -55,3 +55,5 @@ sudo python3 /home/pi/Documents/RufusRaspberry/kitchen_cli.py &
 The GPIOZero library does not directly support rotary encoders.
 
 I found an [example online](https://www.raspberrypi.org/forums/viewtopic.php?t=198815)
+
+Turns out someone already wrote Rotary Encoder support ... 4 years ago! It's [right here](https://github.com/gpiozero/gpiozero/pull/482) but unmerged. Could probably just crib it as a custom implementation.

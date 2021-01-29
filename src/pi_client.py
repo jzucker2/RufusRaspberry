@@ -15,7 +15,7 @@ class PiClient(object):
         self.config = config
         # set up leds first because we pass them to buttons
         self.traffic_lights = None
-        if self.config.has_traffic_lights():
+        if self.config.has_traffic_lights:
             self._set_up_traffic_lights()
         self.buttons = {}
         self._set_up_buttons()
@@ -32,7 +32,7 @@ class PiClient(object):
             self.buttons[activity_name] = button
 
     def turn_off_traffic_lights(self):
-        if self.traffic_lights:
+        if self.config.has_traffic_lights:
             self.traffic_lights.amber.off()
             self.traffic_lights.green.off()
             self.traffic_lights.red.off()

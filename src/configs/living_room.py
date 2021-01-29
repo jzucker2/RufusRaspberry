@@ -23,5 +23,5 @@ class LivingRoomConfig(ControllerConfig):
             ActivityName.BEDTIME: Constants.YELLOW_WIRE_PIN,
             ActivityName.NIGHTLY_MOVIE: Constants.ORANGE_WIRE_PIN,
             ActivityName.WORK_FROM_HOME: Constants.BROWN_WIRE_PIN,
-            # ActivityName.YOGA.value: Constants.WHITE_WIRE_PIN,
+            ActivityName.YOGA.value: Constants.WHITE_WIRE_PIN,
         }

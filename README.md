@@ -49,3 +49,9 @@ sudo python3 /home/pi/Documents/RufusRaspberry/kitchen_cli.py &
 ![GPIOZero pin reference diagram](https://gpiozero.readthedocs.io/en/stable/_images/pin_layout.svg)
 
 [Source from here for pin references for GPIOZero](https://gpiozero.readthedocs.io/en/stable/recipes.html#pin-numbering)
+
+#### Rotary encoder
+
+The GPIOZero library does not directly support rotary encoders.
+
+I found an [example online](https://www.raspberrypi.org/forums/viewtopic.php?t=198815)

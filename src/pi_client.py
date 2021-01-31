@@ -45,6 +45,8 @@ class PiClient(object):
             self.buttons[activity_name] = button
 
     def rotary_encoder_rotated(self, value):
+        # this is slowing things down!
+        # look here! https://stackoverflow.com/questions/24687061/can-i-somehow-share-an-asynchronous-queue-with-a-subprocess
         log.warning(f'(value: {value}) current rotary encoder => {self.volume_rotary_encoder}')
         activity_name = None
         if value > 0:

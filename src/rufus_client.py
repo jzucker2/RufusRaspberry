@@ -2,18 +2,12 @@ from urllib import parse
 import requests
 import logging
 from time import sleep
-from enum import Enum
 from .version import version
 from .constants import Constants
 from .activities import Activities
 
 
 log = logging.getLogger(__name__)
-
-
-class RequestMethod(Enum):
-    GET = 'GET'
-    PATCH = 'PATCH'
 
 
 class RufusClient(object):

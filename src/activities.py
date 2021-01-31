@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass
 from enum import Enum
 from .constants import Constants
-from .rufus_client import RequestMethod
+from .utils import HTTPRequestMethod
 
 
 log = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ class Activity:
     name: str
     url: str
     pin: int
-    method: str = RequestMethod.GET.value
+    method: str = HTTPRequestMethod.GET.value
 
 
 class ActivityName(Enum):
@@ -76,5 +76,5 @@ class Activities(object):
                                                     pin=Constants.ROTARY_BLUE_WIRE_PIN),
         ActivityName.MASTER_TOGGLE_MUTE.value: Activity(name=ActivityName.MASTER_TOGGLE_MUTE.value,
                                                         url='api/v1/volume/mute',
-                                                        pin=Constants.ROTARY_YELLOW_WIRE_PIN, method=RequestMethod.PATCH.value),
+                                                        pin=Constants.ROTARY_YELLOW_WIRE_PIN, method=HTTPRequestMethod.PATCH.value),
     }

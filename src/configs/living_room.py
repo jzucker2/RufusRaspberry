@@ -15,6 +15,16 @@ class LivingRoomConfig(ControllerConfig):
         ])
 
     @property
+    def has_volume_rotary_encoder(self):
+        return True
+
+    @property
+    def volume_rotary_encoder_pins(self):
+        return list([
+            Constants.ROTARY_RED_WIRE_PIN, Constants.ROTARY_YELLOW_WIRE_PIN, Constants.ROTARY_BLUE_WIRE_PIN
+        ])
+
+    @property
     def activities(self):
         return {
             ActivityName.ALL_OFF: Constants.BLUE_WIRE_PIN,

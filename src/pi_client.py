@@ -1,8 +1,8 @@
 import logging
 from gpiozero import Button, TrafficLights
 from signal import pause
-from .activities import Activities, ActivityName
 from .constants import Constants
+from .rotary_encoder import RotaryEncoderClickable
 
 
 log = logging.getLogger(__name__)
@@ -19,6 +19,9 @@ class PiClient(object):
             self._set_up_traffic_lights()
         self.buttons = {}
         self._set_up_buttons()
+        if self.config.has_volume_rotary_encoder:
+            log.info('set up volume rotary encoder!')
+            self._set_up_volume_rotary_encoder()
 
     def _set_up_traffic_lights(self):
         self.traffic_lights = TrafficLights(*self.config.traffic_lights_pins)
@@ -31,6 +34,13 @@ class PiClient(object):
                                                                                 traffic_lights=self.traffic_lights)
             self.buttons[activity_name] = button
 
+    def _set_up_volume_rotary_encoder(self):
+        log.info(f'using config values: {self.config.volume_rotary_encoder_pins}')
+        if self.debug:
+            log.debug('Skipping set up of rotary encoder during debug')
+            return
+        self.volume_rotary_encoder = RotaryEncoderClickable(*self.config.volume_rotary_encoder_pins)
+
     def turn_off_traffic_lights(self):
         if self.config.has_traffic_lights:
             self.traffic_lights.amber.off()
@@ -40,12 +50,3 @@ class PiClient(object):
     def run(self):
         log.info('Start running ...')
         pause()
-
-
-# # Do I really even need this?
-# if __name__ == '__main__':
-#     from .rufus_client import RufusClient
-#     rufus = RufusClient()
-#     client = PiClient(rufus)
-#     client.run()
-

@@ -20,6 +20,11 @@ class Constants(object):
     AMBER_LED_PIN = 15
     GREEN_LED_PIN = 18
 
+    # Rotary Encoder
+    ROTARY_BLUE_WIRE_PIN = 10
+    ROTARY_RED_WIRE_PIN = 11
+    ROTARY_YELLOW_WIRE_PIN = 5
+
     DEFAULT_LOG_LEVEL = logging.INFO
 
     # turns out this needs to be `None`?

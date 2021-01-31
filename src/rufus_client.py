@@ -47,7 +47,7 @@ class RufusClient(object):
             traffic_lights.amber.on()
             traffic_lights.green.off()
             traffic_lights.red.off()
-        log.warning(f'Intending to perform activity: {activity_name.value}')
+        log.info(f'Intending to perform activity: {activity_name.value}')
         if debug:
             log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
             return

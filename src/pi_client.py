@@ -1,10 +1,11 @@
 import logging
+import asyncio
+import functools
 from gpiozero import Button, TrafficLights
 from signal import pause
 from .constants import Constants
 from .rotary_encoder import RotaryEncoderClickable
 from .activities import ActivityName
-from multiprocessing.dummy import Pool
 
 
 log = logging.getLogger(__name__)
@@ -24,11 +25,12 @@ class PiClient(object):
         if self.config.has_volume_rotary_encoder:
             log.info('set up volume rotary encoder!')
             self._set_up_volume_rotary_encoder()
-        self.pool = Pool(10) # Creates a pool with ten threads; more threads = more concurrency.
-                # "pool" is a module attribute; you can be sure there will only
-                # be one of them in your application
-                # as modules are cached after initialization.
-        self.futures = []
+        # self.pool = Pool(10) # Creates a pool with ten threads; more threads = more concurrency.
+        #         # "pool" is a module attribute; you can be sure there will only
+        #         # be one of them in your application
+        #         # as modules are cached after initialization.
+        # self.futures = []
+        self.loop = asyncio.get_running_loop()
 
     def _set_up_traffic_lights(self):
         self.traffic_lights = TrafficLights(*self.config.traffic_lights_pins)
@@ -51,8 +53,14 @@ class PiClient(object):
             log.info("counterclockwise ... volume down!")
             activity_name = ActivityName.MASTER_VOLUME_DOWN
         # traffic lights must be None because the `sleep()` throws off the rotary encoder
-        future = self.pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
-        self.futures.append(future)
+        # future = self.pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
+        # self.futures.append(future)
+        # https://docs.python.org/3.7/library/asyncio-eventloop.html#asyncio.loop.call_soon_threadsafe
+        # # will schedule "print("Hello", flush=True)"
+        # loop.call_soon(
+        #     functools.partial(print, "Hello", flush=True))
+        callable = functools.partial(self.rufus_client.perform_perform_full_activity, activity_name, debug=self.debug, traffic_lights=None)
+        self.loop.call_soon_threadsafe(callable)
 
     def rotary_encoder_button_pressed(self):
         log.info('rotary encoder button pressed ... muting')

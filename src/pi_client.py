@@ -35,6 +35,7 @@ class PiClient(object):
             self.buttons[activity_name] = button
 
     def rotary_encoder_rotated(self, value):
+        log.warning(f'current rotary encoder => {self.volume_rotary_encoder}')
         if value > 0:
             log.info("clockwise")
         else:

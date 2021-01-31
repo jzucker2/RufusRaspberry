@@ -1,5 +1,6 @@
 from gpiozero import Device, Button, DigitalInputDevice, CompositeDevice
 
+
 class RotaryEncoder(Device):
     """
     Decode mechanical rotary encoder pulses.
@@ -31,6 +32,7 @@ class RotaryEncoder(Device):
     """
 
     def __init__(self, pin_a, pin_b, pull_up=True):
+        super(RotaryEncoder, self).__init__()
         self.when_rotated = lambda *args: None
 
         self.pin_a = DigitalInputDevice(pin=pin_a, pull_up=pull_up)
@@ -176,8 +178,9 @@ class RotaryEncoderClickable(CompositeDevice):
         connect the other side of the button to 3V3.
     """
     def __init__(self, pin_a, pin_b, button_pin, encoder_pull_up=True, button_pull_up=True):
-        self.rotary_encoder = RotaryEncoder(pin_a, pin_b, encoder_pull_up)
-        self.button = Button(button_pin, button_pull_up)
+        # self.rotary_encoder = RotaryEncoder(pin_a, pin_b, encoder_pull_up)
+        # self.button = Button(button_pin, button_pull_up)
+        super(RotaryEncoderClickable, self).__init__(rotary_encoder=RotaryEncoder(pin_a, pin_b, pull_up=encoder_pull_up), button=Button(button_pin, pull_up=button_pull_up))
 
     @property
     def when_rotated(self):
@@ -209,7 +212,7 @@ class RotaryEncoderClickable(CompositeDevice):
 
     @property
     def value(self):
-        self.button.value
+        return self.button.value
 
     def __repr__(self):
         return "<gpiozero.%s object on pin_a %r, pin_b %r, button_pin %r, encoder_pull_up=%s, button_pull_up=%s, is_active=%s>" % (

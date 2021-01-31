@@ -21,9 +21,9 @@ class Constants(object):
     GREEN_LED_PIN = 18
 
     # Rotary Encoder
-    ROTARY_BLUE_WIRE_PIN = 10
-    ROTARY_RED_WIRE_PIN = 11
-    ROTARY_YELLOW_WIRE_PIN = 5
+    ROTARY_RED_WIRE_PIN = 6
+    ROTARY_YELLOW_WIRE_PIN = 13
+    ROTARY_BLUE_WIRE_PIN = 19
 
     DEFAULT_LOG_LEVEL = logging.INFO
 

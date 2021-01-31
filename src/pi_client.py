@@ -9,11 +9,6 @@ from multiprocessing.dummy import Pool
 
 log = logging.getLogger(__name__)
 
-pool = Pool(10) # Creates a pool with ten threads; more threads = more concurrency.
-                # "pool" is a module attribute; you can be sure there will only
-                # be one of them in your application
-                # as modules are cached after initialization.
-
 
 class PiClient(object):
     def __init__(self, rufus_client, config, debug=False):
@@ -29,6 +24,10 @@ class PiClient(object):
         if self.config.has_volume_rotary_encoder:
             log.info('set up volume rotary encoder!')
             self._set_up_volume_rotary_encoder()
+        self.pool = Pool(10) # Creates a pool with ten threads; more threads = more concurrency.
+                # "pool" is a module attribute; you can be sure there will only
+                # be one of them in your application
+                # as modules are cached after initialization.
         self.futures = []
 
     def _set_up_traffic_lights(self):
@@ -52,7 +51,7 @@ class PiClient(object):
             log.info("counterclockwise ... volume down!")
             activity_name = ActivityName.MASTER_VOLUME_DOWN
         # traffic lights must be None because the `sleep()` throws off the rotary encoder
-        future = pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
+        future = self.pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
         self.futures.append(future)
 
     def rotary_encoder_button_pressed(self):

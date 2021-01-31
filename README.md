@@ -57,3 +57,10 @@ The GPIOZero library does not directly support rotary encoders.
 I found an [example online](https://www.raspberrypi.org/forums/viewtopic.php?t=198815)
 
 Turns out someone already wrote Rotary Encoder support ... 4 years ago! It's [right here](https://github.com/gpiozero/gpiozero/pull/482) but unmerged. Could probably just crib it as a custom implementation.
+
+## Dev Helper Request
+
+```
+curl -i "http://10.0.1.104:5000/api/v1/activities/vinyl?kitchen=1&dining_room=1&video_select_mode=hack" \
+-H "Content-Type: application/json"
+```

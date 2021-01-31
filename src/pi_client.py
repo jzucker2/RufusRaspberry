@@ -29,6 +29,7 @@ class PiClient(object):
         if self.config.has_volume_rotary_encoder:
             log.info('set up volume rotary encoder!')
             self._set_up_volume_rotary_encoder()
+        self.futures = []
 
     def _set_up_traffic_lights(self):
         self.traffic_lights = TrafficLights(*self.config.traffic_lights_pins)
@@ -51,7 +52,8 @@ class PiClient(object):
             log.info("counterclockwise ... volume down!")
             activity_name = ActivityName.MASTER_VOLUME_DOWN
         # traffic lights must be None because the `sleep()` throws off the rotary encoder
-        pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
+        future = pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
+        self.futures.append(future)
 
     def rotary_encoder_button_pressed(self):
         log.info('rotary encoder button pressed ... muting')

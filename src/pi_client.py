@@ -3,6 +3,7 @@ from gpiozero import Button, TrafficLights
 from signal import pause
 from .constants import Constants
 from .rotary_encoder import RotaryEncoderClickable
+from .activities import ActivityName
 
 
 log = logging.getLogger(__name__)
@@ -30,19 +31,25 @@ class PiClient(object):
         # for activity_name in list(ActivityName):
         for activity_name, pin in self.config.activities.items():
             button = Button(pin, bounce_time=Constants.DEFAULT_BOUNCE_TIME)
-            button.when_pressed = self.rufus_client.get_request_activity_method(activity_name, debug=self.debug,
-                                                                                traffic_lights=self.traffic_lights)
+            button.when_pressed = self.rufus_client.get_request_activity_button_func(activity_name, debug=self.debug,
+                                                                                     traffic_lights=self.traffic_lights)
             self.buttons[activity_name] = button
 
     def rotary_encoder_rotated(self, value):
-        log.warning(f'current rotary encoder => {self.volume_rotary_encoder}')
+        log.warning(f'(value: {value}) current rotary encoder => {self.volume_rotary_encoder}')
+        activity_name = None
         if value > 0:
-            log.info("clockwise")
+            log.info("clockwise ... volume up!")
+            activity_name = ActivityName.MASTER_VOLUME_UP
         else:
-            log.info("counterclockwise")
+            log.info("counterclockwise ... volume down!")
+            activity_name = ActivityName.MASTER_VOLUME_DOWN
+        self.rufus_client.perform_perform_full_activity(activity_name, debug=self.debug, traffic_lights=self.traffic_lights)
 
     def rotary_encoder_button_pressed(self):
-        log.info('rotary encoder button pressed')
+        log.info('rotary encoder button pressed ... muting')
+        self.rufus_client.perform_perform_full_activity(ActivityName.MASTER_TOGGLE_MUTE, debug=self.debug,
+                                                        traffic_lights=self.traffic_lights)
 
     def _set_up_volume_rotary_encoder(self):
         log.info(f'using config values: {self.config.volume_rotary_encoder_pins}')

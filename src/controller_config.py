@@ -14,10 +14,6 @@ class VolumeRotaryEncoderPinsUnassignedException(ControllerConfigException): pas
 class ControllerConfig(object):
     def __init__(self, debug=False):
         self.debug = debug
-        # set up leds first because we pass them to buttons
-        # self._set_up_traffic_lights()
-        # self.buttons = {}
-        # self._set_up_buttons()
 
     @property
     def has_traffic_lights(self):

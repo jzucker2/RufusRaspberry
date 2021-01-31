@@ -2,12 +2,18 @@ from urllib import parse
 import requests
 import logging
 from time import sleep
+from enum import Enum
 from .version import version
 from .constants import Constants
 from .activities import Activities
 
 
 log = logging.getLogger(__name__)
+
+
+class RequestMethod(Enum):
+    GET = 'GET'
+    PATCH = 'PATCH'
 
 
 class RufusClient(object):
@@ -36,33 +42,40 @@ class RufusClient(object):
             'user-agent': f'rufus-raspberry/{version}',
             'content-type': 'application/json',
         }
-        return requests.get(url, headers=headers)
+        activity_method = self.get_activity_method(activity_name)
+        return requests.request(activity_method, url, headers=headers)
 
-    def get_request_activity_method(self, activity_name, debug=False, traffic_lights=None):
-        def dynamic_func():
-            if traffic_lights:
-                traffic_lights.amber.on()
-                traffic_lights.green.off()
-                traffic_lights.red.off()
-            log.info(f'Intending to perform activity: {activity_name.value}')
-            if debug:
-                log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
-                return
-            response = self.request_activity(activity_name.value)
-            if not traffic_lights:
-                return response
-            log.debug(f'Activating traffic lights')
-            if response.status_code == 200:
-                traffic_lights.amber.off()
-                traffic_lights.green.on()
-                traffic_lights.red.off()
-            else:
-                traffic_lights.amber.off()
-                traffic_lights.green.off()
-                traffic_lights.red.on()
-            sleep(1)
-            traffic_lights.amber.off()
+    def get_activity_method(self, activity_name):
+        return Activities.get_activity_method(activity_name)
+
+    def perform_perform_full_activity(self, activity_name, debug=False, traffic_lights=None):
+        if traffic_lights:
+            traffic_lights.amber.on()
             traffic_lights.green.off()
             traffic_lights.red.off()
+        log.info(f'Intending to perform activity: {activity_name.value}')
+        if debug:
+            log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
+            return
+        response = self.request_activity(activity_name.value)
+        if not traffic_lights:
             return response
+        log.debug(f'Activating traffic lights')
+        if response.status_code == 200:
+            traffic_lights.amber.off()
+            traffic_lights.green.on()
+            traffic_lights.red.off()
+        else:
+            traffic_lights.amber.off()
+            traffic_lights.green.off()
+            traffic_lights.red.on()
+        sleep(1)
+        traffic_lights.amber.off()
+        traffic_lights.green.off()
+        traffic_lights.red.off()
+        return response
+
+    def get_request_activity_button_func(self, activity_name, debug=False, traffic_lights=None):
+        def dynamic_func():
+            return self.perform_perform_full_activity(activity_name, debug=debug, traffic_lights=traffic_lights)
         return dynamic_func

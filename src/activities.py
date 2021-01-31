@@ -2,6 +2,7 @@ import logging
 from dataclasses import dataclass
 from enum import Enum
 from .constants import Constants
+from .rufus_client import RequestMethod
 
 
 log = logging.getLogger(__name__)
@@ -12,6 +13,7 @@ class Activity:
     name: str
     url: str
     pin: int
+    method: str = RequestMethod.GET.value
 
 
 class ActivityName(Enum):
@@ -22,6 +24,9 @@ class ActivityName(Enum):
     NIGHTLY_MOVIE = 'nightly-movie'
     WORK_FROM_HOME = 'work-from-home'
     YOGA = 'yoga'
+    MASTER_VOLUME_UP = 'master-volume-up'
+    MASTER_VOLUME_DOWN = 'master-volume-down'
+    MASTER_TOGGLE_MUTE = 'master-toggle-mute'
 
 
 class Activities(object):
@@ -42,6 +47,10 @@ class Activities(object):
         return cls.get_activity(activity_name.value).pin
 
     @classmethod
+    def get_activity_method(cls, activity_name):
+        return cls.get_activity(activity_name.value).method
+
+    @classmethod
     def get_activity(cls, activity_name):
         return cls.ACTIVITIES[activity_name]
 
@@ -59,4 +68,13 @@ class Activities(object):
         ActivityName.YOGA.value: Activity(name=ActivityName.YOGA.value,
                                                     url='api/v1/activities/yoga?kitchen=0&dining_room=0',
                                                     pin=Constants.WHITE_WIRE_PIN),
+        ActivityName.MASTER_VOLUME_UP.value: Activity(name=ActivityName.MASTER_VOLUME_UP.value,
+                                                    url='api/v1/volume/step/1',
+                                                    pin=Constants.ROTARY_RED_WIRE_PIN),
+        ActivityName.MASTER_VOLUME_DOWN.value: Activity(name=ActivityName.MASTER_VOLUME_DOWN.value,
+                                                    url='api/v1/volume/step/-1',
+                                                    pin=Constants.ROTARY_BLUE_WIRE_PIN),
+        ActivityName.MASTER_TOGGLE_MUTE.value: Activity(name=ActivityName.MASTER_TOGGLE_MUTE.value,
+                                                        url='api/v1/volume/mute',
+                                                        pin=Constants.ROTARY_YELLOW_WIRE_PIN, method=RequestMethod.PATCH.value),
     }

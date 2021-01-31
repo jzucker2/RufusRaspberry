@@ -34,12 +34,23 @@ class PiClient(object):
                                                                                 traffic_lights=self.traffic_lights)
             self.buttons[activity_name] = button
 
+    def rotary_encoder_rotated(self, value):
+        if value > 0:
+            log.info("clockwise")
+        else:
+            log.info("counterclockwise")
+
+    def rotary_encoder_button_pressed(self):
+        log.info('rotary encoder button pressed')
+
     def _set_up_volume_rotary_encoder(self):
         log.info(f'using config values: {self.config.volume_rotary_encoder_pins}')
         if self.debug:
             log.debug('Skipping set up of rotary encoder during debug')
             return
         self.volume_rotary_encoder = RotaryEncoderClickable(*self.config.volume_rotary_encoder_pins)
+        self.volume_rotary_encoder.when_rotated = self.rotary_encoder_rotated
+        self.volume_rotary_encoder.when_pressed = self.rotary_encoder_button_pressed
 
     def turn_off_traffic_lights(self):
         if self.config.has_traffic_lights:

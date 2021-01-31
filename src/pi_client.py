@@ -44,7 +44,8 @@ class PiClient(object):
         else:
             log.info("counterclockwise ... volume down!")
             activity_name = ActivityName.MASTER_VOLUME_DOWN
-        # self.rufus_client.perform_perform_full_activity(activity_name, debug=self.debug, traffic_lights=self.traffic_lights)
+        # traffic lights must be None because the `sleep()` throws off the rotary encoder
+        self.rufus_client.perform_perform_full_activity(activity_name, debug=self.debug, traffic_lights=None)
 
     def rotary_encoder_button_pressed(self):
         log.info('rotary encoder button pressed ... muting')

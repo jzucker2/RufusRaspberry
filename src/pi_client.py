@@ -31,6 +31,7 @@ class PiClient(object):
         #         # as modules are cached after initialization.
         # self.futures = []
         self.loop = asyncio.get_event_loop()
+        asyncio.set_event_loop(self.loop)
 
     def _set_up_traffic_lights(self):
         self.traffic_lights = TrafficLights(*self.config.traffic_lights_pins)

@@ -47,8 +47,8 @@ class Activities(object):
         return cls.get_activity(activity_name.value).pin
 
     @classmethod
-    def get_activity_method(cls, activity_name):
-        return cls.get_activity(activity_name.value).method
+    def get_activity_method(cls, activity_name_string):
+        return cls.get_activity(activity_name_string).method
 
     @classmethod
     def get_activity(cls, activity_name):

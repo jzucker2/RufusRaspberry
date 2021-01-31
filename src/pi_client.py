@@ -4,9 +4,15 @@ from signal import pause
 from .constants import Constants
 from .rotary_encoder import RotaryEncoderClickable
 from .activities import ActivityName
+from multiprocessing.dummy import Pool
 
 
 log = logging.getLogger(__name__)
+
+pool = Pool(10) # Creates a pool with ten threads; more threads = more concurrency.
+                # "pool" is a module attribute; you can be sure there will only
+                # be one of them in your application
+                # as modules are cached after initialization.
 
 
 class PiClient(object):
@@ -45,7 +51,7 @@ class PiClient(object):
             log.info("counterclockwise ... volume down!")
             activity_name = ActivityName.MASTER_VOLUME_DOWN
         # traffic lights must be None because the `sleep()` throws off the rotary encoder
-        self.rufus_client.perform_perform_full_activity(activity_name, debug=self.debug, traffic_lights=None)
+        pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
 
     def rotary_encoder_button_pressed(self):
         log.info('rotary encoder button pressed ... muting')

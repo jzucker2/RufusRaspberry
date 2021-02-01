@@ -26,7 +26,7 @@ class Constants(object):
     ROTARY_BLUE_WIRE_PIN = 19
 
     # Volume domain switch
-    GREEN_VOLUME_DOMAIN_WIRE_PIN = 44
+    GREEN_VOLUME_DOMAIN_WIRE_PIN = 21
 
     DEFAULT_LOG_LEVEL = logging.INFO
 

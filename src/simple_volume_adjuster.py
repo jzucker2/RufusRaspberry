@@ -84,7 +84,7 @@ class AbstractVolumeAdjuster(object):
         return self.local_activity_name
 
     def adjust_volume(self, value, domain=VolumeDomain.LOCAL):
-        activity_name = domain.activity_name
+        activity_name = self.get_activity_for_domain(domain)
         log.info(f'About to adjust volume ({value}) for domain: {domain}')
         response = self.rufus_client.perform_perform_full_activity(activity_name, custom_value=value, debug=self.debug, traffic_lights=self.traffic_lights)
         log.info(f'For volume adjustment, got: {response}')

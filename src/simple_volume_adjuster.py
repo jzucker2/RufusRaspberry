@@ -128,4 +128,4 @@ class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
         #     self.clear_events()
 
     def get_total_adjustment(self):
-        return reduce(lambda x, y:x+y, self.events)
+        return reduce(lambda x, y:int(x)+int(y), self.events)

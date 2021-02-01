@@ -116,16 +116,5 @@ class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
             return
         self.adjust_volume(total_volume)
 
-        # now = datetime.utcnow()
-        # if now - event.created < timedelta(seconds=self.request_delay):
-        #     log.info(f'less than 2 seconds')
-        #     total_volume = self.get_total_adjustment()
-        #     log.info(f'Got total_volume: {total_volume}')
-        #     if total_volume == 0:
-        #         self.clear_events()
-        #         return
-        #     self.adjust_volume(value)
-        #     self.clear_events()
-
     def get_total_adjustment(self):
         return reduce(lambda x, y:int(x)+int(y), self.events)

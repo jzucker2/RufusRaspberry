@@ -43,23 +43,7 @@ class PiClient(object):
         # this is slowing things down!
         # look here! https://stackoverflow.com/questions/24687061/can-i-somehow-share-an-asynchronous-queue-with-a-subprocess
         log.warning(f'(value: {value}) current rotary encoder => {self.volume_rotary_encoder}')
-        # activity_name = None
-        if value > 0:
-            log.info("clockwise ... volume up!")
-            # activity_name = ActivityName.MASTER_VOLUME_UP
-        else:
-            log.info("counterclockwise ... volume down!")
-            # activity_name = ActivityName.MASTER_VOLUME_DOWN
         self.volume_adjuster.add_event(value)
-        # traffic lights must be None because the `sleep()` throws off the rotary encoder
-        # future = self.pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
-        # self.futures.append(future)
-        # https://docs.python.org/3.7/library/asyncio-eventloop.html#asyncio.loop.call_soon_threadsafe
-        # # will schedule "print("Hello", flush=True)"
-        # loop.call_soon(
-        #     functools.partial(print, "Hello", flush=True))
-        # callable = functools.partial(self.rufus_client.perform_perform_full_activity, activity_name, debug=self.debug, traffic_lights=None)
-        # self.loop.call_soon_threadsafe(callable)
 
     def rotary_encoder_button_pressed(self):
         log.info('rotary encoder button pressed ... muting')

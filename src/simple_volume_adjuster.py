@@ -3,8 +3,8 @@ from functools import reduce
 from dataclasses import dataclass
 from enum import Enum
 from datetime import datetime, timedelta
-from .activities import ActivityName
 import threading
+from .activities import ActivityName
 
 
 log = logging.getLogger(__name__)

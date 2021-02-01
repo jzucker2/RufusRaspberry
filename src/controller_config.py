@@ -9,6 +9,7 @@ log = logging.getLogger(__name__)
 class ControllerConfigException(Exception): pass
 class TrafficLightsPinsUnassignedException(ControllerConfigException): pass
 class VolumeRotaryEncoderPinsUnassignedException(ControllerConfigException): pass
+class VolumeDomainSwitchPinUnassignedException(ControllerConfigException): pass
 
 
 class ControllerConfig(object):
@@ -34,3 +35,11 @@ class ControllerConfig(object):
     @property
     def volume_rotary_encoder_pins(self):
         raise VolumeRotaryEncoderPinsUnassignedException('No pins assigned!')
+
+    @property
+    def has_volume_domain_switch(self):
+        return False
+
+    @property
+    def volume_domain_switch_pins(self):
+        raise VolumeDomainSwitchPinUnassignedException('No pins assigned!')

@@ -24,10 +24,16 @@ class PiClient(object):
         if self.config.has_volume_rotary_encoder:
             log.info('set up volume rotary encoder!')
             self._set_up_volume_rotary_encoder()
-        self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, debug=debug, traffic_lights=self.traffic_lights)
+            self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, debug=debug, traffic_lights=self.traffic_lights)
+        if self.config.has_volume_domain_switch:
+            log.info('set up volume domain switch!')
+            self._set_up_volume_domain_switch()
 
     def _set_up_traffic_lights(self):
         self.traffic_lights = TrafficLights(*self.config.traffic_lights_pins)
+
+    def _set_up_volume_domain_switch(self):
+        self.volume_domain_switch = Button(*self.config.volume_domain_switch_pins)
 
     def _set_up_buttons(self):
         # for activity_name in list(ActivityName):
@@ -43,6 +49,8 @@ class PiClient(object):
         # this is slowing things down!
         # look here! https://stackoverflow.com/questions/24687061/can-i-somehow-share-an-asynchronous-queue-with-a-subprocess
         log.warning(f'(value: {value}) current rotary encoder => {self.volume_rotary_encoder}')
+        volume_domain_switch = 1
+        log.info(f'!!!!!!!! Got volume domain switch position: {volume_domain_switch}')
         self.volume_adjuster.add_event(value)
 
     def rotary_encoder_button_pressed(self):

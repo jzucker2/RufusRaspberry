@@ -80,6 +80,10 @@ class AbstractVolumeAdjuster(object):
 
 class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
 
+    def __init__(self, rufus_client, traffic_lights=None, debug=False):
+        super(SimpleVolumeAdjuster, self).__init__(rufus_client, traffic_lights=traffic_lights, debug=debug)
+        self.timer = None
+
     @property
     def request_delay(self):
         return 1

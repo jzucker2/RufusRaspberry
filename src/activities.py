@@ -25,7 +25,10 @@ class ActivityName(Enum):
     MASTER_VOLUME_UP = 'master-volume-up'
     MASTER_VOLUME_DOWN = 'master-volume-down'
     MASTER_TOGGLE_MUTE = 'master-toggle-mute'
-    MASTER_VOLUME_ADJUSTMENT = 'master-volume-adjustment'
+    LIVING_ROOM_VOLUME_ADJUSTMENT = 'living-room-volume-adjustment'
+    DINING_ROOM_VOLUME_ADJUSTMENT = 'dining-room-volume-adjustment'
+    KITCHEN_VOLUME_ADJUSTMENT = 'kitchen-volume-adjustment'
+    GLOBAL_VOLUME_ADJUSTMENT = 'global-volume-adjustment'
 
 
 class Activities(object):
@@ -64,8 +67,17 @@ class Activities(object):
                                                     url='api/v1/volume/step/1'),
         ActivityName.MASTER_VOLUME_DOWN.value: Activity(name=ActivityName.MASTER_VOLUME_DOWN.value,
                                                     url='api/v1/volume/step/-1'),
-        ActivityName.MASTER_VOLUME_ADJUSTMENT.value: Activity(name=ActivityName.MASTER_VOLUME_ADJUSTMENT.value,
-                                                        url='api/v1/volume/step/{value}'),
+        ActivityName.LIVING_ROOM_VOLUME_ADJUSTMENT.value: Activity(name=ActivityName.LIVING_ROOM_VOLUME_ADJUSTMENT.value,
+                                                                   url='api/v1/volume/step/{value}'),
+        ActivityName.KITCHEN_VOLUME_ADJUSTMENT.value: Activity(
+            name=ActivityName.KITCHEN_VOLUME_ADJUSTMENT.value,
+            url='api/v1/volume/zone_name/kitchen/step/{value}'),
+        ActivityName.DINING_ROOM_VOLUME_ADJUSTMENT.value: Activity(
+            name=ActivityName.DINING_ROOM_VOLUME_ADJUSTMENT.value,
+            url='api/v1/volume/zone_name/dining_room/step/{value}'),
+        ActivityName.GLOBAL_VOLUME_ADJUSTMENT.value: Activity(
+            name=ActivityName.GLOBAL_VOLUME_ADJUSTMENT.value,
+            url='api/v1/volume/global/step/{value}'),
         ActivityName.MASTER_TOGGLE_MUTE.value: Activity(name=ActivityName.MASTER_TOGGLE_MUTE.value,
                                                         url='api/v1/volume/mute',
                                                         method=HTTPRequestMethod.PATCH.value),

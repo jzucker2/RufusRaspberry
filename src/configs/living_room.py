@@ -35,6 +35,10 @@ class LivingRoomConfig(ControllerConfig):
         ])
 
     @property
+    def local_volume_activity_name(self):
+        return ActivityName.LIVING_ROOM_VOLUME_ADJUSTMENT
+
+    @property
     def activities(self):
         return {
             ActivityName.ALL_OFF: Constants.BLUE_WIRE_PIN,

@@ -74,7 +74,8 @@ class AbstractVolumeAdjuster(object):
 
     def last_event_datetime(self):
         if len(self.events):
-            return self.events[-1]
+            event = self.events[-1]
+            return event.created
         raise NoEventsAbstractVolumeAdjusterException('No events!')
 
 

@@ -38,10 +38,11 @@ class VolumeDomain(Enum):
 class RotationEvent:
     value: int
     created: datetime
+    domain: VolumeDomain = VolumeDomain.LOCAL
 
     @classmethod
-    def create_event(cls, value):
-        return cls(value, datetime.utcnow())
+    def create_event(cls, value, domain=VolumeDomain.LOCAL):
+        return cls(value, datetime.utcnow(), domain=domain)
     
     @property
     def direction(self) -> RotationDirection:
@@ -73,7 +74,7 @@ class AbstractVolumeAdjuster(object):
         self.events = []
 
     def add_event(self, value, domain=None) -> RotationEvent:
-        event = RotationEvent.create_event(value)
+        event = RotationEvent.create_event(value, domain=domain)
         self.events.append(event)
         return event
 
@@ -95,6 +96,15 @@ class AbstractVolumeAdjuster(object):
             return event.created
         raise NoEventsAbstractVolumeAdjusterException('No events!')
 
+    def last_event_info(self):
+        if len(self.events):
+            event = self.events[-1]
+            return {
+                'created': event.created,
+                'domain': event.domain,
+            }
+        raise NoEventsAbstractVolumeAdjusterException('No events!')
+
 
 class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
 
@@ -114,17 +124,19 @@ class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
         super(SimpleVolumeAdjuster, self).add_event(value, domain=domain)
         if self.timer:
             self.timer.cancel()
-        self.timer = threading.Timer(self.request_delay, self.simple_volume_request, domain)
+        self.timer = threading.Timer(self.request_delay, self.simple_volume_request)
         self.timer.start()
 
-    def simple_volume_request(self, domain):
+    def simple_volume_request(self):
         now = datetime.utcnow()
-        time_difference = now - self.last_event_datetime()
+        last_event_info = self.last_event_info()
+        time_difference = now - last_event_info['created']
         if time_difference < timedelta(seconds=self.event_debounce_duration):
             log.info(f'Only been {time_difference} so no request yet, returning ...')
             return
+        domain = last_event_info['domain']
         total_volume = self.get_total_adjustment()
-        log.info(f'Got total_volume: {total_volume}')
+        log.info(f'Got total_volume: {total_volume} for intended domain: {domain}')
         self.clear_events()
         if total_volume == 0:
             return

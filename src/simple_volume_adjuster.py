@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from enum import Enum
 from datetime import datetime, timedelta
 from .activities import ActivityName
+import threading
 
 
 log = logging.getLogger(__name__)
@@ -46,6 +47,10 @@ class RotationEvent:
         return self.direction.activity_name
 
 
+class AbstractVolumerAdjusterException(Exception): pass
+class NoEventsAbstractVolumeAdjusterException(AbstractVolumerAdjusterException): pass
+
+
 class AbstractVolumeAdjuster(object):
     def __init__(self, rufus_client, traffic_lights=None, debug=False):
         self.events = []
@@ -67,6 +72,11 @@ class AbstractVolumeAdjuster(object):
         log.info(f'For volume adjustment, got: {response}')
         return response
 
+    def last_event_datetime(self):
+        if len(self.events):
+            return self.events[-1]
+        raise NoEventsAbstractVolumeAdjusterException('No events!')
+
 
 class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
 
@@ -74,18 +84,40 @@ class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
     def request_delay(self):
         return 1
 
+    @property
+    def event_debounce_duration(self):
+        return 1
+
     def add_event(self, value):
-        event = super(SimpleVolumeAdjuster, self).add_event(value)
+        super(SimpleVolumeAdjuster, self).add_event(value)
+        if self.timer:
+            self.timer.cancel()
+        self.timer = threading.Timer(self.request_delay, self.simple_volume_request)
+        self.timer.start()
+
+    def simple_volume_request(self):
         now = datetime.utcnow()
-        if now - event.created < timedelta(seconds=self.request_delay):
-            log.info(f'less than 2 seconds')
-            total_volume = self.get_total_adjustment()
-            log.info(f'Got total_volume: {total_volume}')
-            if total_volume == 0:
-                self.clear_events()
-                return
-            self.adjust_volume(value)
-            self.clear_events()
+        time_difference = now - self.last_event_datetime()
+        if time_difference < timedelta(seconds=self.event_debounce_duration):
+            log.info(f'Only been {time_difference} so no request yet, returning ...')
+            return
+        total_volume = self.get_total_adjustment()
+        log.info(f'Got total_volume: {total_volume}')
+        self.clear_events()
+        if total_volume == 0:
+            return
+        self.adjust_volume(total_volume)
+
+        # now = datetime.utcnow()
+        # if now - event.created < timedelta(seconds=self.request_delay):
+        #     log.info(f'less than 2 seconds')
+        #     total_volume = self.get_total_adjustment()
+        #     log.info(f'Got total_volume: {total_volume}')
+        #     if total_volume == 0:
+        #         self.clear_events()
+        #         return
+        #     self.adjust_volume(value)
+        #     self.clear_events()
 
     def get_total_adjustment(self):
         return reduce(lambda x, y:x.value+y, self.events)

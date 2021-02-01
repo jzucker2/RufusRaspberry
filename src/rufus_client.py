@@ -19,18 +19,21 @@ class RufusClient(object):
     def base_url(self):
         return self.ip
 
-    def get_url(self, activity_name):
+    def get_url(self, activity_name, custom_value=None):
         base_url = self.base_url
-        print(f'base_url: {base_url}')
+        log.info(f'base_url: {base_url}')
         activity_url = Activities.get_activity_url_suffix(activity_name)
-        print(f'activity_url: {activity_url}')
+        log.info(f'activity_url: {activity_url}')
+        if custom_value:
+            activity_url = activity_url.format(value=custom_value)
+            log.info(f'with custom_value: {activity_url}')
         final = parse.urljoin(base_url, activity_url)
-        print(f'final: {final}')
+        log.info(f'final: {final}')
         return final
 
-    def request_activity(self, activity_name):
-        url = self.get_url(activity_name)
-        print(url)
+    def request_activity(self, activity_name, custom_value=None):
+        url = self.get_url(activity_name, custom_value=custom_value)
+        log.info(url)
         log.info(f'Perform activity: {activity_name} with url => {url}')
         headers = {
             'user-agent': f'rufus-raspberry/{version}',
@@ -42,16 +45,18 @@ class RufusClient(object):
     def get_activity_method(self, activity_name):
         return Activities.get_activity_method(activity_name)
 
-    def perform_perform_full_activity(self, activity_name, debug=False, traffic_lights=None):
+    def perform_perform_full_activity(self, activity_name, custom_value=None, debug=False, traffic_lights=None):
         if traffic_lights:
             traffic_lights.amber.on()
             traffic_lights.green.off()
             traffic_lights.red.off()
         log.info(f'Intending to perform activity: {activity_name.value}')
+        if custom_value:
+            log.info(f'... with custom_value: {custom_value}')
         if debug:
             log.warning(f'In debug mode, no HTTP requests, just logging, taking the poison pill ...')
             return
-        response = self.request_activity(activity_name.value)
+        response = self.request_activity(activity_name.value, custom_value=custom_value)
         if not traffic_lights:
             return response
         log.debug(f'Activating traffic lights')

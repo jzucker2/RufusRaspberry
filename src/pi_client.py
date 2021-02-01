@@ -1,11 +1,10 @@
 import logging
-import asyncio
-import functools
 from gpiozero import Button, TrafficLights
 from signal import pause
 from .constants import Constants
 from .rotary_encoder import RotaryEncoderClickable
 from .activities import ActivityName
+from .simple_volume_adjuster import SimpleVolumeAdjuster
 
 
 log = logging.getLogger(__name__)
@@ -25,13 +24,7 @@ class PiClient(object):
         if self.config.has_volume_rotary_encoder:
             log.info('set up volume rotary encoder!')
             self._set_up_volume_rotary_encoder()
-        # self.pool = Pool(10) # Creates a pool with ten threads; more threads = more concurrency.
-        #         # "pool" is a module attribute; you can be sure there will only
-        #         # be one of them in your application
-        #         # as modules are cached after initialization.
-        # self.futures = []
-        self.loop = asyncio.get_event_loop()
-        asyncio.set_event_loop(self.loop)
+        self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, debug=debug, traffic_lights=self.traffic_lights)
 
     def _set_up_traffic_lights(self):
         self.traffic_lights = TrafficLights(*self.config.traffic_lights_pins)
@@ -45,16 +38,19 @@ class PiClient(object):
             self.buttons[activity_name] = button
 
     def rotary_encoder_rotated(self, value):
+        # proposal! turning this will start a timer that collects clicks for 2 seconds, after 2 second, it fires off an async volume request
+        # stopgap idea: only perform call if the dial hasn't spun for a full second? (Could lower by 2 as a compromise)
         # this is slowing things down!
         # look here! https://stackoverflow.com/questions/24687061/can-i-somehow-share-an-asynchronous-queue-with-a-subprocess
         log.warning(f'(value: {value}) current rotary encoder => {self.volume_rotary_encoder}')
-        activity_name = None
+        # activity_name = None
         if value > 0:
             log.info("clockwise ... volume up!")
-            activity_name = ActivityName.MASTER_VOLUME_UP
+            # activity_name = ActivityName.MASTER_VOLUME_UP
         else:
             log.info("counterclockwise ... volume down!")
-            activity_name = ActivityName.MASTER_VOLUME_DOWN
+            # activity_name = ActivityName.MASTER_VOLUME_DOWN
+        self.volume_adjuster.add_event(value)
         # traffic lights must be None because the `sleep()` throws off the rotary encoder
         # future = self.pool.apply_async(self.rufus_client.perform_perform_full_activity, args=(activity_name), kwds={'debug':self.debug, 'traffic_lights': None})
         # self.futures.append(future)
@@ -62,8 +58,8 @@ class PiClient(object):
         # # will schedule "print("Hello", flush=True)"
         # loop.call_soon(
         #     functools.partial(print, "Hello", flush=True))
-        callable = functools.partial(self.rufus_client.perform_perform_full_activity, activity_name, debug=self.debug, traffic_lights=None)
-        self.loop.call_soon_threadsafe(callable)
+        # callable = functools.partial(self.rufus_client.perform_perform_full_activity, activity_name, debug=self.debug, traffic_lights=None)
+        # self.loop.call_soon_threadsafe(callable)
 
     def rotary_encoder_button_pressed(self):
         log.info('rotary encoder button pressed ... muting')

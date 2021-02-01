@@ -46,6 +46,9 @@ class RotationEvent:
     def activity_name(self) -> ActivityName:
         return self.direction.activity_name
 
+    def __int__(self):
+        return self.value
+
 
 class AbstractVolumerAdjusterException(Exception): pass
 class NoEventsAbstractVolumeAdjusterException(AbstractVolumerAdjusterException): pass
@@ -125,4 +128,4 @@ class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
         #     self.clear_events()
 
     def get_total_adjustment(self):
-        return reduce(lambda x, y:x+y.value, self.events)
+        return reduce(lambda x, y:x+y, self.events)

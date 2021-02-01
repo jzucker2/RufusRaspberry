@@ -25,6 +25,20 @@ class LivingRoomConfig(ControllerConfig):
         ])
 
     @property
+    def has_volume_domain_switch(self):
+        return True
+
+    @property
+    def volume_domain_switch_pins(self):
+        return list([
+            Constants.GREEN_VOLUME_DOMAIN_WIRE_PIN
+        ])
+
+    @property
+    def local_volume_activity_name(self):
+        return ActivityName.LIVING_ROOM_VOLUME_ADJUSTMENT
+
+    @property
     def activities(self):
         return {
             ActivityName.ALL_OFF: Constants.BLUE_WIRE_PIN,

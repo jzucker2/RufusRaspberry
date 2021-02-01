@@ -4,7 +4,7 @@ from signal import pause
 from .constants import Constants
 from .rotary_encoder import RotaryEncoderClickable
 from .activities import ActivityName
-from .simple_volume_adjuster import SimpleVolumeAdjuster
+from .simple_volume_adjuster import SimpleVolumeAdjuster, VolumeDomain
 
 
 log = logging.getLogger(__name__)
@@ -24,10 +24,16 @@ class PiClient(object):
         if self.config.has_volume_rotary_encoder:
             log.info('set up volume rotary encoder!')
             self._set_up_volume_rotary_encoder()
-        self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, debug=debug, traffic_lights=self.traffic_lights)
+            self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, self.config.local_volume_activity_name, debug=debug, traffic_lights=self.traffic_lights)
+        if self.config.has_volume_domain_switch:
+            log.info('set up volume domain switch!')
+            self._set_up_volume_domain_switch()
 
     def _set_up_traffic_lights(self):
         self.traffic_lights = TrafficLights(*self.config.traffic_lights_pins)
+
+    def _set_up_volume_domain_switch(self):
+        self.volume_domain_switch = Button(*self.config.volume_domain_switch_pins)
 
     def _set_up_buttons(self):
         # for activity_name in list(ActivityName):
@@ -37,13 +43,23 @@ class PiClient(object):
                                                                                      traffic_lights=self.traffic_lights)
             self.buttons[activity_name] = button
 
+    def get_volume_domain_switch_state(self):
+        if not self.config.has_volume_domain_switch:
+            return None
+        return self.volume_domain_switch.value
+
+    def current_volume_domain(self):
+        return VolumeDomain(self.get_volume_domain_switch_state())
+
     def rotary_encoder_rotated(self, value):
         # proposal! turning this will start a timer that collects clicks for 2 seconds, after 2 second, it fires off an async volume request
         # stopgap idea: only perform call if the dial hasn't spun for a full second? (Could lower by 2 as a compromise)
         # this is slowing things down!
         # look here! https://stackoverflow.com/questions/24687061/can-i-somehow-share-an-asynchronous-queue-with-a-subprocess
         log.warning(f'(value: {value}) current rotary encoder => {self.volume_rotary_encoder}')
-        self.volume_adjuster.add_event(value)
+        current_volume_domain = self.current_volume_domain()
+        log.info(f'!!!!!!!! Current volume domain: {current_volume_domain}, now adjust volume ...')
+        self.volume_adjuster.add_event(value, domain=current_volume_domain)
 
     def rotary_encoder_button_pressed(self):
         log.info('rotary encoder button pressed ... muting')

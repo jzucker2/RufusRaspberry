@@ -25,6 +25,9 @@ class Constants(object):
     ROTARY_YELLOW_WIRE_PIN = 13
     ROTARY_BLUE_WIRE_PIN = 19
 
+    # Volume domain switch
+    GREEN_VOLUME_DOMAIN_WIRE_PIN = 21
+
     DEFAULT_LOG_LEVEL = logging.INFO
 
     # turns out this needs to be `None`?

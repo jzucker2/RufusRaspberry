@@ -43,3 +43,11 @@ class ControllerConfig(object):
     @property
     def volume_domain_switch_pins(self):
         raise VolumeDomainSwitchPinUnassignedException('No pins assigned!')
+
+    @property
+    def local_volume_activity_name(self):
+        raise ControllerConfigException('Missing `local_volume_activity_name`')
+
+    @property
+    def local_mute_activity_name(self):
+        raise ControllerConfigException('Missing `local_mute_activity_name`')

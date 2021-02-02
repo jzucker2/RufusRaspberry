@@ -29,6 +29,11 @@ class ActivityName(Enum):
     DINING_ROOM_VOLUME_ADJUSTMENT = 'dining-room-volume-adjustment'
     KITCHEN_VOLUME_ADJUSTMENT = 'kitchen-volume-adjustment'
     GLOBAL_VOLUME_ADJUSTMENT = 'global-volume-adjustment'
+    LIVING_ROOM_MUTE_TOGGLE = 'living-room-mute-toggle'
+    DINING_ROOM_MUTE_TOGGLE = 'dining-room-mute-toggle'
+    KITCHEN_MUTE_TOGGLE = 'kitchen-mute-toggle'
+    GLOBAL_MUTE_TOGGLE = 'global-mute-toggle'
+
 
 
 class Activities(object):
@@ -81,4 +86,20 @@ class Activities(object):
         ActivityName.MASTER_TOGGLE_MUTE.value: Activity(name=ActivityName.MASTER_TOGGLE_MUTE.value,
                                                         url='api/v1/volume/mute',
                                                         method=HTTPRequestMethod.PATCH.value),
+        ActivityName.LIVING_ROOM_MUTE_TOGGLE.value: Activity(
+            name=ActivityName.LIVING_ROOM_MUTE_TOGGLE.value,
+            url='api/v1/volume/mute', # works for just main zone
+            method=HTTPRequestMethod.PATCH.value),
+        ActivityName.KITCHEN_MUTE_TOGGLE.value: Activity(
+            name=ActivityName.KITCHEN_MUTE_TOGGLE.value,
+            url='api/v1/volume/zone_name/kitchen/toggle-mute',
+            method=HTTPRequestMethod.PATCH.value),
+        ActivityName.DINING_ROOM_MUTE_TOGGLE.value: Activity(
+            name=ActivityName.DINING_ROOM_MUTE_TOGGLE.value,
+            url='api/v1/volume/zone_name/dining_room/toggle-mute',
+            method=HTTPRequestMethod.PATCH.value),
+        ActivityName.GLOBAL_MUTE_TOGGLE.value: Activity(
+            name=ActivityName.GLOBAL_MUTE_TOGGLE.value,
+            url='api/v1/volume/global/toggle-mute',
+            method=HTTPRequestMethod.PATCH.value),
     }

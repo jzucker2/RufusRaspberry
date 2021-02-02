@@ -39,6 +39,10 @@ class LivingRoomConfig(ControllerConfig):
         return ActivityName.LIVING_ROOM_VOLUME_ADJUSTMENT
 
     @property
+    def local_mute_activity_name(self):
+        return ActivityName.LIVING_ROOM_MUTE_TOGGLE
+
+    @property
     def activities(self):
         return {
             ActivityName.ALL_OFF: Constants.BLUE_WIRE_PIN,

@@ -63,12 +63,13 @@ class NoEventsAbstractVolumeAdjusterException(AbstractVolumerAdjusterException):
 
 
 class AbstractVolumeAdjuster(object):
-    def __init__(self, rufus_client, local_activity_name, traffic_lights=None, debug=False):
+    def __init__(self, rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=None, debug=False):
         self.events = []
         self.rufus_client = rufus_client
         self.traffic_lights = traffic_lights
         self.debug = debug
-        self.local_activity_name = local_activity_name
+        self.local_volume_activity_name = local_volume_activity_name
+        self.local_mute_activity_name = local_mute_activity_name
 
     def clear_events(self):
         self.events = []
@@ -78,15 +79,27 @@ class AbstractVolumeAdjuster(object):
         self.events.append(event)
         return event
 
-    def get_activity_for_domain(self, domain):
+    def get_volume_activity_for_domain(self, domain):
         if domain == VolumeDomain.GLOBAL:
             return ActivityName.GLOBAL_VOLUME_ADJUSTMENT
-        return self.local_activity_name
+        return self.local_volume_activity_name
+
+    def get_mute_activity_for_domain(self, domain):
+        if domain == VolumeDomain.GLOBAL:
+            return ActivityName.GLOBAL_MUTE_TOGGLE
+        return self.local_mute_activity_name
 
     def adjust_volume(self, value, domain=VolumeDomain.LOCAL):
-        activity_name = self.get_activity_for_domain(domain)
+        activity_name = self.get_volume_activity_for_domain(domain)
         log.info(f'About to adjust volume ({value}) for domain: {domain}')
         response = self.rufus_client.perform_perform_full_activity(activity_name, custom_value=value, debug=self.debug, traffic_lights=self.traffic_lights)
+        log.info(f'For volume adjustment, got: {response}')
+        return response
+
+    def toggle_mute(self, domain=VolumeDomain.LOCAL):
+        activity_name = self.get_mute_activity_for_domain(domain)
+        log.info(f'About to toggle mute for domain: {domain}')
+        response = self.rufus_client.perform_perform_full_activity(activity_name, debug=self.debug, traffic_lights=self.traffic_lights)
         log.info(f'For volume adjustment, got: {response}')
         return response
 
@@ -108,8 +121,8 @@ class AbstractVolumeAdjuster(object):
 
 class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
 
-    def __init__(self, rufus_client, local_activity_name, traffic_lights=None, debug=False):
-        super(SimpleVolumeAdjuster, self).__init__(rufus_client, local_activity_name, traffic_lights=traffic_lights, debug=debug)
+    def __init__(self, rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=None, debug=False):
+        super(SimpleVolumeAdjuster, self).__init__(rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=traffic_lights, debug=debug)
         self.timer = None
 
     @property

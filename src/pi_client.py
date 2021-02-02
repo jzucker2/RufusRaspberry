@@ -24,7 +24,7 @@ class PiClient(object):
         if self.config.has_volume_rotary_encoder:
             log.info('set up volume rotary encoder!')
             self._set_up_volume_rotary_encoder()
-            self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, self.config.local_volume_activity_name, debug=debug, traffic_lights=self.traffic_lights)
+            self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, self.config.local_volume_activity_name, self.config.local_mute_activity_name, debug=debug, traffic_lights=self.traffic_lights)
         if self.config.has_volume_domain_switch:
             log.info('set up volume domain switch!')
             self._set_up_volume_domain_switch()
@@ -62,9 +62,9 @@ class PiClient(object):
         self.volume_adjuster.add_event(value, domain=current_volume_domain)
 
     def rotary_encoder_button_pressed(self):
-        log.info('rotary encoder button pressed ... muting')
-        self.rufus_client.perform_perform_full_activity(ActivityName.MASTER_TOGGLE_MUTE, debug=self.debug,
-                                                        traffic_lights=self.traffic_lights)
+        current_volume_domain = self.current_volume_domain()
+        log.info(f'$$$$$$$$ Current volume domain: {current_volume_domain}, now toggling mute ...')
+        self.volume_adjuster.toggle_mute(domain=current_volume_domain)
 
     def _set_up_volume_rotary_encoder(self):
         log.info(f'using config values: {self.config.volume_rotary_encoder_pins}')

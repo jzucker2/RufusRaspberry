@@ -7,6 +7,10 @@ Raspberry Pi is currently installing python 3.7.3 by default.
 ### Set up
 
 ```
+# set up python3
+sudo apt update
+sudo apt install python3 idle3
+# now set up project
 pip install -r requirements.txt
 ```
 

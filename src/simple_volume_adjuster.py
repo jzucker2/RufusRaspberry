@@ -63,13 +63,14 @@ class NoEventsAbstractVolumeAdjusterException(AbstractVolumerAdjusterException):
 
 
 class AbstractVolumeAdjuster(object):
-    def __init__(self, rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=None, debug=False):
+    def __init__(self, rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=None, debug=False, reverse_rotary_encoder=False):
         self.events = []
         self.rufus_client = rufus_client
         self.traffic_lights = traffic_lights
         self.debug = debug
         self.local_volume_activity_name = local_volume_activity_name
         self.local_mute_activity_name = local_mute_activity_name
+        self.reverse_rotary_encoder = reverse_rotary_encoder
 
     def clear_events(self):
         self.events = []
@@ -92,6 +93,10 @@ class AbstractVolumeAdjuster(object):
     def adjust_volume(self, value, domain=VolumeDomain.LOCAL):
         activity_name = self.get_volume_activity_for_domain(domain)
         log.info(f'About to adjust volume ({value}) for domain: {domain}')
+        if self.reverse_rotary_encoder:
+            log.info('We have `reverse_rotary_encoder` set to True! So first we reverse the volume adjustment')
+            value = -value
+            log.info(f'Updated value is now =========> {value}')
         response = self.rufus_client.perform_perform_full_activity(activity_name, custom_value=value, debug=self.debug, traffic_lights=self.traffic_lights)
         log.info(f'For volume adjustment, got: {response}')
         return response
@@ -121,8 +126,8 @@ class AbstractVolumeAdjuster(object):
 
 class SimpleVolumeAdjuster(AbstractVolumeAdjuster):
 
-    def __init__(self, rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=None, debug=False):
-        super(SimpleVolumeAdjuster, self).__init__(rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=traffic_lights, debug=debug)
+    def __init__(self, rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=None, debug=False, reverse_rotary_encoder=False):
+        super(SimpleVolumeAdjuster, self).__init__(rufus_client, local_volume_activity_name, local_mute_activity_name, traffic_lights=traffic_lights, debug=debug, reverse_rotary_encoder=reverse_rotary_encoder)
         self.timer = None
 
     @property

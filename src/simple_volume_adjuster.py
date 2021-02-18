@@ -16,6 +16,7 @@ class RotationDirectionException(Exception): pass
 class RotationDirection(Enum):
     CLOCKWISE = 1
     COUNTER_CLOCKWISE = -1
+    NO_OP = 0
 
     @property
     def activity_name(self):
@@ -23,6 +24,8 @@ class RotationDirection(Enum):
             return ActivityName.MASTER_VOLUME_UP
         elif self == self.COUNTER_CLOCKWISE:
             return ActivityName.MASTER_VOLUME_DOWN
+        elif self == self.NO_OP:
+            return None
         else:
             raise RotationDirectionException(f'Unexpected direction: {self}')
 
@@ -48,14 +51,25 @@ class RotationEvent:
     def direction(self) -> RotationDirection:
         if self.value > 0:
             return RotationDirection.CLOCKWISE
-        return RotationDirection.COUNTER_CLOCKWISE
+        elif self.value < 0:
+            return RotationDirection.COUNTER_CLOCKWISE
+        elif self.value == 0:
+            return RotationDirection.NO_OP
+        raise RotationDirectionException(f'Unexpected value: {self.value}')
+
 
     @property
     def activity_name(self) -> ActivityName:
         return self.direction.activity_name
 
     def __int__(self):
-        return self.value
+        if self.direction == RotationDirection.CLOCKWISE:
+            return 1
+        elif self.direction == RotationDirection.COUNTER_CLOCKWISE:
+            return -1
+        elif self.direction == RotationDirection.NO_OP:
+            return 0
+        raise RotationDirectionException(f'Unexpected direction: {self.direction}')
 
 
 class AbstractVolumerAdjusterException(Exception): pass

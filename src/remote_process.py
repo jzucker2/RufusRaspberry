@@ -8,7 +8,7 @@ from .utils import get_log_level
 log = logging.getLogger(__name__)
 
 
-def process(config_class):
+def run_remote(config_class):
     arg_parser = create_argparser()
     args = arg_parser.parse_args()
     log_level = get_log_level(args.debug)

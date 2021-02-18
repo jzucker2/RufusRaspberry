@@ -11,10 +11,11 @@ log = logging.getLogger(__name__)
 
 
 class PiClient(object):
-    def __init__(self, rufus_client, config, debug=False):
+    def __init__(self, rufus_client, config, debug=False, reverse_rotary_encoder=False):
         self.debug = debug
         self.rufus_client = rufus_client
         self.config = config
+        self.reverse_rotary_encoder = reverse_rotary_encoder
         # set up leds first because we pass them to buttons
         self.traffic_lights = None
         if self.config.has_traffic_lights:
@@ -24,7 +25,7 @@ class PiClient(object):
         if self.config.has_volume_rotary_encoder:
             log.info('set up volume rotary encoder!')
             self._set_up_volume_rotary_encoder()
-            self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, self.config.local_volume_activity_name, self.config.local_mute_activity_name, debug=debug, traffic_lights=self.traffic_lights)
+            self.volume_adjuster = SimpleVolumeAdjuster(self.rufus_client, self.config.local_volume_activity_name, self.config.local_mute_activity_name, debug=debug, traffic_lights=self.traffic_lights, reverse_rotary_encoder=self.reverse_rotary_encoder)
         if self.config.has_volume_domain_switch:
             log.info('set up volume domain switch!')
             self._set_up_volume_domain_switch()

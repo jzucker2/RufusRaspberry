@@ -16,6 +16,6 @@ def process(config_class):
     log.info(f'Set log_level to {log_level}')
     rufus_client = RufusClient(ip=args.ip)
     living_room_config = config_class()
-    pi_client = PiClient(rufus_client, living_room_config, debug=args.debug)
+    pi_client = PiClient(rufus_client, living_room_config, debug=args.debug, reverse_rotary_encoder=args.reverse_rotary_encoder)
     # run as well
     pi_client.run()

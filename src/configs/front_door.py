@@ -17,6 +17,7 @@ class FrontDoorConfig(ControllerConfig):
     @property
     def activities(self):
         return {
-            ActivityName.ALL_OFF: Constants.BLUE_WIRE_PIN,
+            ActivityName.WELCOME_HOME: Constants.BLUE_WIRE_PIN,
+            ActivityName.LEAVE_ALBION: Constants.RED_WIRE_PIN,
             ActivityName.BEDTIME: Constants.YELLOW_WIRE_PIN,
         }

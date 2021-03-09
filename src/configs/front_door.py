@@ -18,6 +18,6 @@ class FrontDoorConfig(ControllerConfig):
     def activities(self):
         return {
             ActivityName.LEAVE_ALBION: Constants.BLUE_WIRE_PIN,
-            ActivityName.WELCOME_HOME: Constants.RED_WIRE_PIN,
+            ActivityName.WELCOME_HOME: Constants.GREEN_WIRE_PIN,
             ActivityName.BEDTIME: Constants.YELLOW_WIRE_PIN,
         }

@@ -19,6 +19,8 @@ class ActivityName(Enum):
     APPLE_TV = 'apple-tv'
     VINYL = 'vinyl'
     BEDTIME = 'bedtime'
+    LEAVE_ALBION = 'leave-albion'
+    WELCOME_HOME = 'welcome-home'
     NIGHTLY_MOVIE = 'nightly-movie'
     WORK_FROM_HOME = 'work-from-home'
     YOGA = 'yoga'
@@ -62,6 +64,10 @@ class Activities(object):
         ActivityName.APPLE_TV.value: Activity(name=ActivityName.APPLE_TV.value, url='api/v1/activities/apple-tv'),
         ActivityName.VINYL.value: Activity(name=ActivityName.VINYL.value, url='api/v1/activities/vinyl?kitchen=1&dining_room=1'),
         ActivityName.BEDTIME.value: Activity(name=ActivityName.BEDTIME.value, url='api/v1/activities/bedtime?kitchen=0&dining_room=0'),
+        ActivityName.LEAVE_ALBION.value: Activity(name=ActivityName.LEAVE_ALBION.value,
+                                             url='api/v1/activities/leave?kitchen=0&dining_room=0'),
+        ActivityName.WELCOME_HOME.value: Activity(name=ActivityName.WELCOME_HOME.value,
+                                             url='api/v1/activities/welcome-home'),
         ActivityName.NIGHTLY_MOVIE.value: Activity(name=ActivityName.NIGHTLY_MOVIE.value,
                                              url='api/v1/activities/nightly-movie'),
         ActivityName.WORK_FROM_HOME.value: Activity(name=ActivityName.WORK_FROM_HOME.value,
